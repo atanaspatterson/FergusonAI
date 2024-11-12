@@ -15,15 +15,67 @@ body {
     margin: 0;
 }
 
+#site {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-height: 100vh;
+}
+
+#chart-container {
+    background-image: url(SoccerBG.webp);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100%;
+    flex: 1; 
+}
+
+#chart-header {
+    margin-left: 30px;
+    margin-bottom: 10px;
+}
+
+#chart-box {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+    height: 80%;
+}
+
+#chart-box > * {
+    background-color: #c4c4c4;
+    border: 3px solid #000;
+    width: 90%;
+    height: 90%;
+    max-width: 90%;
+    max-height: 90%;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* #chart > * {
+   
+} */
+
 #chat-container {
+    flex: 1; 
     background-color: #fff;
     display: flex;
     flex-direction: column;
     gap: 15px;
     justify-content: center;
     width: 50%;
-    max-width: 600px; /* Ensure the container doesn't grow too large on big screens */
+    max-width: 600px; 
     padding: 15px;
+    padding-top: 25px;
     border-radius: 4px;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
 }
@@ -38,9 +90,16 @@ body {
     text-align: center;
 }
 
+div > img {
+    width: 80%;
+    height: 80%;
+    opacity: 0.5;
+    object-fit: contain;
+}
+
 #messages {
     flex-grow: 1; /* Take up available space */
-    height: 300px;
+    height: 200px;
     width: 100%;
     border: 2px solid rgb(229, 228, 228);
     padding: 10px;
@@ -75,4 +134,48 @@ body {
 
 #send-btn:active {
     background-color: rgb(25, 34, 63);
+}
+
+#modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Modal content styling */
+#modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 600px;
+    text-align: center;
+    position: relative;
+}
+
+/* Hide the modal by default */
+.hidden {
+    display: none !important;
+}
+
+/* Style for close button in modal */
+#close-modal {
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#close-modal:hover {
+    background-color: #45a049;
 }

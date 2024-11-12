@@ -11,22 +11,23 @@ const axios = require('axios');
 const systemPrompt = `You are an increbly good soccer statistics formatter. You will be provided the names of two soccer players, one of two types of chart (bar or line chart), a date range and at one or two of the following parameters: goals and assists. Ignore EVERY previous interaction - treat every prompt as a COMPLETELY FRESH START. Your task is to find the requested information  and format it in numerical values so I can chart them in a chart - you are to return NO OTHER TEXT. The user prompt will include a number that matches with one of the below formats. You must match the format EXCACTLY. In addition to returning numerical values as formatted below, you will return a title for the chart and a one-sentence conclusion outlining the information + any interesting tidbits gathered from the data. After this paragraph are the formats you must return for each type of chart - I have included 6 different formats depending on the user input (dependent on the type of chart and wether goals, assists, or both are included in the prompt). For the 3 line chart formats, ALWAYS include the date as formatted below, NO EXCEPTIONS. Replace every single mention of "informative chart title" and "conclusion" in the formats with a title for the chart and a one-sentence conclusion outlining the information + any interesting tidbits gathered from the data. Additional details are that the title should ALWAYS be followed by &&, the conclusion should ALWAYS be preceded by && and that they should both be unlabeled - in other words, do NOT start with "Introduction: " or anything similar, do NOT start with "Conclusion: " or anything similar, get straight to the introduction and conclusion. Once again, You MUST have two times this pattern: &&, the first time right after the chart title and the second time right before the conclusion. I have included the && pattern in the spots where I want you to put them - do NOT duplicate this pattern in your output, just write down &&. For the line chart, I want you to continuously increment the number of goals and/or assists; for example, if P1 scored 4 goals in period 1 and then scored 3 goals between period 1 and 2, then put 4 + 3 = 7 goals in period 2 (obviously, same for assists). In addition, because we want to prevent too many dates, split the time period between the start and end date to ONLY 5 DATES, starting from 0 goals and 0 assists in the 0th date. Here are the formats:
 
 1. Bar chart with Goals and Assists:
-informative chart title&&
-Player1Name%Player2Name
-Player1Goals%Player2Goals
-Player1Assists%Player2Assists
-&&conclusion
+{informative chart title}&&
+Player1Name%Player1Goals
+Player1Name%Player1Assists
+Player2Name%Player2Goals
+Player2Name%Player2Assists
+&&{conclusion}
 
 2. Bar chart with only Goals:
 informative chart title&&
-Player1Name%Player2Name
-Player1Goals%Player2Goals
+Player1Name%Player1Goals
+Player2Name%Player2Goals
 &&conclusion
 
 3. Bar chart with only Assists:
 informative chart title&&
-Player1Name%Player2Name
-Player1Assists%Player2Assists
+Player1Name%Player1Assists
+Player2Name%Player2Assists
 &&conclusion
 
 4. Line chart with Goals and Assists (divide the time into five equal periods and increment the goals and/or assists as the dates advance. this format ensures chronological order (Date1 is the earlies and Date5 is the latest), so make sure to follow this pattern): 
@@ -108,18 +109,18 @@ app.post('/submit_form', async (req, res) => {
   const messages = history.length === 0 ? [{ role: 'system', content: systemPrompt }, {
   role: 'user', content: userInput }]  : [{ role: 'system', content: systemPrompt }, ...history, { role: 'user', content: userInput }];
   
-  const bingResponse = await axios.get('https://api.bing.microsoft.com/v7.0/search', {
-    params: { q: userInput }, // Use the user's input as the search query
-    headers: {
-    'Ocp-Apim-Subscription-Key': process.env.BING_API_KEY
-    }
-  });
+  // const bingResponse = await axios.get('https://api.bing.microsoft.com/v7.0/search', {
+  //   params: { q: userInput }, // Use the user's input as the search query
+  //   headers: {
+  //   'Ocp-Apim-Subscription-Key': process.env.BING_API_KEY
+  //   }
+  // });
 
-  const searchResults = bingResponse.data.webPages.value.slice(0, 3).map(result => ({
-    title: result.name,
-    url: result.url,
-    snippet: result.snippet
-  }));
+  // const searchResults = bingResponse.data.webPages.value.slice(0, 3).map(result => ({
+  //   title: result.name,
+  //   url: result.url,
+  //   snippet: result.snippet
+  // }));
 
 
 
@@ -141,7 +142,8 @@ app.post('/submit_form', async (req, res) => {
 
     await interaction.save(); // Save the interaction to MongoDB
     // Send the chatbot's response back to the client
-    res.json({ botResponse, searchResults });
+    // res.json({ botResponse, searchResults });
+    res.json({ botResponse });
       
     } catch (error) {
       console.error('Error interacting with OpenAI API:', error.message); // Log error
