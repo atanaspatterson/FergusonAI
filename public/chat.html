@@ -12,7 +12,7 @@
     <body>
         <div id="site"></div>
         <div id="chat-container">
-            <h1>AI Chatbot</h1>
+            <h1>FergusonAI</h1>
             <div id="messages"></div>
         
             <label for="player1-select">Player 1:</label>
@@ -36,24 +36,24 @@
             </select>
         
             <label for="start-date">Start Date:</label>
-            <input type="date" id="start-date">
+            <input type="date" id="start-date" value="2018-01-01">
         
             <label for="end-date">End Date:</label>
-            <input type="date" id="end-date">
+            <input type="date" id="end-date" value="2022-01-01">
 
             <fieldset>
                 <legend>Select Chart Type:</legend>
                 <input type="radio" id="bar-chart" name="chart-type" value="bar" checked>
                 <label for="bar-chart">Bar Chart</label>
-                <input type="radio" id="line-chart" name="chart-type" value="line">
-                <label for="line-chart">Line Graph</label>
+                <!-- <input type="radio" id="line-chart" name="chart-type" value="line">
+                <label for="line-chart">Line Graph</label> -->
             </fieldset>
         
             <fieldset>
                 <legend>Select Data Types:</legend>
-                <input type="checkbox" id="goals" name="data-type" value="goals">
+                <input type="radio" id="goals" name="data-type" value="goals" checked>
                 <label for="goals">Goals</label>
-                <input type="checkbox" id="assists" name="data-type" value="assists">
+                <input type="radio" id="assists" name="data-type" value="assists">
                 <label for="assists">Assists</label>
             </fieldset>
         

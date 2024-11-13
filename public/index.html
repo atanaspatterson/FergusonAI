@@ -5,8 +5,7 @@
     </form>
 <script>
         document.getElementById('participant-form').addEventListener('submit', function(event) {
-            const participantID =
-            document.getElementById('participantID').value;
+            const participantID = document.getElementById('participantID').value;
             // Save the Participant ID in localStorage
             localStorage.setItem('participantID', participantID);
         });
