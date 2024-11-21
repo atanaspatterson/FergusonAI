@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Task</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        html {
+            background-color: rgb(229, 228, 228);
+            font-family: 'Roboto', sans-serif;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px 0;
+        }
+        #task-container {
+            flex: 1; 
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 50%;
+            max-width: 600px; 
+            padding: 15px;
+            padding-top: 25px;
+            border-radius: 4px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .back-button {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background-color: rgb(94, 134, 255);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.15s ease-in;
+            z-index: 10;
+        }
+        .back-button:hover {
+            background-color: rgb(52, 74, 142);
+        }
+        #task-description {
+            text-align: left;
+            padding: 20px;
+            background-color: rgb(245, 245, 245);
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div id="task-container">
+        <button class="back-button" onclick="window.location.href='links.html'">Back to Workflow</button>
+        <h1>Study Task Description</h1>
+        <div id="task-description">
+            <p>A relative who is unfamiliar with soccer has come across a video showing highlights from the best soccer players of the last 10 years. Despite them enjoying the highlights and getting a few names of footballers they liked from the video, your relative lacks context into the players' careers, their teams and positions throughout the last decade, and most importantly how these players compare against each other to recognize which names actually contribute the most to their team.<br><br>
+
+            Your task is to choose three players from the 12 available ones in our application and come up with as much information on them as possible. You should aim to get information such as specific statistics, the role of the players in each team, and how they compare to other standout players in the last 10 years.<br><br>
+                
+            You are also given freedom to venture off and type in any conclusion you like, such as selecting highly specific timeframes<br><br>
+                
+            <strong>Details & Instructions:</strong><br>
+            <ul>
+                <li>The format of the information will be for you to write down 1-2 sentence conclusions as you go. For instance, these might look like: "X has more goals than Y because X plays more forward", or "X has played for Y team"</li>
+                <li>Even though the graph will display correct data, try choose dates before 2015 unless you are well-knowledged in these players' careetr. </li>
+                <li>The activity should take about 10-20 minutes</li>
+            </ul><br><br>
+            </p>
+            <h3>Below is an explanation of how the app works:</h3>
+            <p>
+                FergusonAI allows you to choose 2 players to compare from 2 lists of 6 standout attacking players of the last decade and generate a bar chart that compares either their goals or their assists.<br><br>
+                Begin by selecting the two players from each list, the start and end date of the data, and the data to compare (goals or assists). After submission, a bar chart will appear in one of the 6 panels of the right side of the screen - we currently allow 6 charts to be generated before refreshing the page is needed. <br><br>
+                You can click on the generated chart to view a larger version of it alongside a title and a short description of the data.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

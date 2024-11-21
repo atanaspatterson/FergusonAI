@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Workflow</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .workflow-section {
+            background-color: #f4f4f4;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .workflow-link {
+            display: block;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .workflow-link:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Study Workflow</h1>
+    
+    <div class="workflow-section">
+        <h2>Demographics Questionnaire</h2>
+        <a href="https://usfca.qualtrics.com/jfe/form/SV_bmEfCywEdDzysPI" class="workflow-link" id="demographics-link">Complete Demographics Questionnaire</a>
+    </div>
+
+    <div class="workflow-section">
+        <h2>Main Task</h2>
+        <a href="task.html" class="workflow-link" id="task-link">Read the Main Task</a>
+    </div>
+
+    <div class="workflow-section">
+        <h2>Pre-Task Assessments</h2>
+        <a href="https://YOUR_QUALTRICS_PRE_TASK_ASSESSMENT_LINK" class="workflow-link" id="pre-task-link">Complete Pre-Task Assessments</a>
+    </div>
+    
+    <div class="workflow-section">
+        <h2>AI Agent Interaction</h2>
+        <a href="chat.html" class="workflow-link" id="ai-agent-link">Interact with AI Agent</a>
+    </div>
+
+    <div class="workflow-section">
+        <h2>Post-Task Questionnaire</h2>
+        <a href="https://YOUR_QUALTRICS_POST_TASK_SURVEY_LINK" class="workflow-link" id="post-task-link">Complete Post-Task Questionnaire</a>
+    </div>
+
+    <script>
+        // Retrieve and validate participant ID before allowing navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            const participantID = localStorage.getItem('participantID');
+            
+            if (!participantID) {
+                // Redirect back to ID entry if no participant ID is found
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Add event listeners for survey links
+            const surveyButtons = ['demographics-link', 'pre-task-link', 'post-task-link'];
+            
+            surveyButtons.forEach(buttonId => {
+                const button = document.getElementById(buttonId);
+                button.addEventListener('click', function() {
+                    // Redirect to survey using server endpoint
+                    fetch('/redirect-to-survey', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ participantID: participantID })
+                    })
+                    .then(response => response.text())
+                    .then(surveyUrl => {
+                        // Redirect to the survey URL
+                        logEvent('redirect', 'Qualtrics Survey');
+                        window.location.href = surveyUrl;
+                    })
+                    .catch(error => {
+                        console.error('Error redirecting to survey:', error);
+                        alert('There was an error redirecting to the survey. Please try again.');
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
