@@ -190,13 +190,19 @@ app.post('/history', async (req, res) => {
 });
 
 app.post('/redirect-to-survey', (req, res) => {
-  const { participantID } = req.body; // Getting participantID from request body
-  // Base Qualtrics URL from Step 2
+  console.log('Received redirect request with body:', req.body);
+  
+  const { participantID } = req.body;
+  
+  if (!participantID) {
+    console.error('No participantID provided');
+    return res.status(400).send('participantID is required');
+  }
+  
   const qualtricsBaseUrl = "https://usfca.qualtrics.com/jfe/form/SV_bmEfCywEdDzysPI";
-  // Add the participant ID as a URL parameter
-  const surveyUrl = `${qualtricsBaseUrl}?participantID=$
-  ${encodeURIComponent(participantID)}`;
-  // Send the URL back to the client
+  const surveyUrl = `${qualtricsBaseUrl}?participantID=${encodeURIComponent(participantID)}`;
+  
+  console.log('Generated survey URL:', surveyUrl);
   res.send(surveyUrl);
 });
 

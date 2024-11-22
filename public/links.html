@@ -81,7 +81,8 @@
             
             surveyButtons.forEach(buttonId => {
                 const button = document.getElementById(buttonId);
-                button.addEventListener('click', function() {
+                button.addEventListener('click', function(event) {
+                    event.preventDefault();
                     // Redirect to survey using server endpoint
                     fetch('/redirect-to-survey', {
                         method: 'POST',
@@ -93,7 +94,7 @@
                     .then(response => response.text())
                     .then(surveyUrl => {
                         // Redirect to the survey URL
-                        logEvent('redirect', 'Qualtrics Survey');
+                        // logEvent('redirect', 'Qualtrics Survey');
                         window.location.href = surveyUrl;
                     })
                     .catch(error => {
