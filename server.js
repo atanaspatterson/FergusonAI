@@ -5,10 +5,11 @@ require('dotenv').config();
 console.log(`Loaded MONGO_URI: ${process.env.MONGO_URI}`);  
 const Interaction = require('./models/Interaction');
 const EventLog = require('./models/EventLog');
+const ParticipantID = require('./models/ParticipantID')
 const { OpenAI } = require('openai'); 
 const axios = require('axios');
 
-const systemPrompt = `You are an increbly good soccer statistics formatter. You will be given the names of two soccer players, one of two types of chart (bar or line chart), a date range and at one or two of the following parameters: goals and assists. Ignore EVERY previous interaction - treat every prompt as a COMPLETELY FRESH START. Your task is to find the requested information  and format it in numerical values so I can chart them in a chart - you are to return NO OTHER TEXT. The user prompt will include a number that matches with one of the below formats. You must match the format EXCACTLY. In addition to returning numerical values as formatted below, you will return a title for the chart and a one-sentence conclusion outlining the information + any interesting tidbits gathered from the data. After this paragraph are the formats you must return for each type of chart - I have included 6 different formats depending on the user input (dependent on the type of chart and wether goals, assists, or both are included in the prompt). For the 3 line chart formats, ALWAYS include the date as formatted below, NO EXCEPTIONS. Replace every single mention of "informative chart title" and "conclusion" in the formats with a title for the chart and a 4 or 5 entence conclusion outlining the information, a short explanation of the reason behind the stats for player (you should include position, team, maybe injuries or any other info), & any interesting tidbits gathered from the data. The title should ALWAYS be followed by &&, the conclusion should ALWAYS be preceded by && and that they should both be unlabeled - in other words, do NOT start with "Introduction: " or anything similar, do NOT start with "Conclusion: " or anything similar, get straight to the introduction and conclusion. Once again, You MUST have two times this pattern: &&, the first time right after the chart title and the second time right before the conclusion. I have included the && pattern in the spots where I want you to put them - do NOT duplicate this pattern in your output, just write down &&. For the line chart, I want you to continuously increment the number of goals and/or assists; for example, if P1 scored 4 goals in period 1 and then scored 3 goals between period 1 and 2, then put 4 + 3 = 7 goals in period 2 (obviously, same for assists).For line graphs, split the time period between the start and end date to ONLY 5 DATES, starting from 0 goals and 0 assists in the 0th date. The formats are:
+newPrompt = `You are an increbly good soccer statistics formatter. You will be given the names of two soccer players, one of two types of chart (bar or line chart), a date range and at one or two of the following parameters: goals and assists. Ignore EVERY previous interaction - treat every prompt as a COMPLETELY FRESH START. Your task is to find the requested information  and format it in numerical values so I can chart them in a chart - you are to return NO OTHER TEXT. The user prompt will include a number that matches with one of the below formats. You must match the format EXCACTLY. In addition to returning numerical values as formatted below, you will return a title for the chart and a one-sentence conclusion outlining the information + any interesting tidbits gathered from the data. After this paragraph are the formats you must return for each type of chart - I have included 6 different formats depending on the user input (dependent on the type of chart and wether goals, assists, or both are included in the prompt). For the 3 line chart formats, ALWAYS include the date as formatted below, NO EXCEPTIONS. Replace every single mention of "informative chart title" and "conclusion" in the formats with a title for the chart and a 4 or 5 entence conclusion outlining the information, a short explanation of the reason behind the stats for player (you should include position, team, maybe injuries or any other info), & any interesting tidbits gathered from the data. The title should ALWAYS be followed by &&, the conclusion should ALWAYS be preceded by && and that they should both be unlabeled - in other words, do NOT start with "Introduction: " or anything similar, do NOT start with "Conclusion: " or anything similar, get straight to the introduction and conclusion. Once again, You MUST have two times this pattern: &&, the first time right after the chart title and the second time right before the conclusion. I have included the && pattern in the spots where I want you to put them - do NOT duplicate this pattern in your output, just write down &&. For the line chart, I want you to continuously increment the number of goals and/or assists; for example, if P1 scored 4 goals in period 1 and then scored 3 goals between period 1 and 2, then put 4 + 3 = 7 goals in period 2 (obviously, same for assists).For line graphs, split the time period between the start and end date to ONLY 5 DATES, starting from 0 goals and 0 assists in the 0th date. The formats are:
 
 2. Bar chart with only Goals:
 informative chart title&&
@@ -51,17 +52,24 @@ app.get('/', (req, res) => {
 
 
 app.post('/submit_form', async (req, res) => {
+  console.log(req.body); 
 
 
 // 1. Receive user input from client script.
 
 
-  const { history = [], input: userInput, id: participantID } = req.body; // Default history
+  const { history = [], input: userInput, id: participantID, botType: type } = req.body; // Default history
   if (!participantID) {
     return res.status(400).send('Participant ID is required');
   }
   
   // ternary operator to check if first user input (i.e., if history exists)
+  console.log("Type of bot: ", type)
+  if (type === "baseline") {
+    systemPrompt = "You are a very helpful assistant. Help at the best of your abilities!"
+  } else {
+    systemPrompt = newPrompt;
+  }
   const messages = history.length === 0 ? [{ role: 'system', content: systemPrompt }, {
   role: 'user', content: userInput }]  : [{ role: 'system', content: systemPrompt }, ...history, { role: 'user', content: userInput }];
   
@@ -93,7 +101,8 @@ app.post('/submit_form', async (req, res) => {
     const interaction = new Interaction({
       userInput: userInput,
       botResponse: botResponse,
-      participantID: participantID
+      participantID: participantID,
+      botType: type
     });
 
     await interaction.save(); // Save the interaction to MongoDB
@@ -109,7 +118,7 @@ app.post('/submit_form', async (req, res) => {
 });
 
 app.post('/log-event', async (req, res) => {
-  const { eventType, elementName, timestamp, participantID } = req.body;
+  const { eventType, elementName, timestamp, participantID, botType } = req.body;
   // Check for participantID
   if (!participantID) {
     return res.status(400).send('Participant ID is required');
@@ -117,7 +126,7 @@ app.post('/log-event', async (req, res) => {
   try {
     // Save the event to MongoDB
     // Add participantID
-    const event = new EventLog({ eventType, elementName, timestamp, participantID });
+    const event = new EventLog({ eventType, elementName, timestamp, participantID, botType });
     await event.save();
     res.status(200).send('Event logged successfully');
   } catch (error) {
@@ -160,6 +169,54 @@ app.post('/redirect-to-survey', (req, res) => {
   
   console.log('Generated survey URL:', surveyUrl);
   res.send(surveyUrl);
+});
+
+app.get('/api/current-id', async (req, res) => {
+    try {
+        const idDoc = await ParticipantID.findOne({ type: 'current' });
+        
+        if (!idDoc) {
+            // Initialize with test_1 if no document exists
+            const newIdDoc = await ParticipantID.create({
+                type: 'current',
+                currentId: 'test_1'
+            });
+            res.json({ currentId: newIdDoc.currentId });
+        } else {
+            res.json({ currentId: idDoc.currentId });
+        }
+    } catch (error) {
+        console.error('Database error:', error);
+        res.status(500).json({ error: 'Error fetching ID' });
+    }
+});
+
+app.post('/api/update-id', async (req, res) => {
+    try {
+        const { usedId } = req.body;
+        
+        // Check if it's a test ID
+        if (!usedId.startsWith('test_')) {
+            return res.status(200).send('Non-test ID used');
+        }
+
+        // Get current test ID
+        const currentDoc = await ParticipantID.findOne({ type: 'current' });
+        
+        // If it matches current test ID, update to next number
+        if (currentDoc && currentDoc.currentId === usedId) {
+            const currentNum = parseInt(usedId.split('_')[1]);
+            const newId = `test_${currentNum + 1}`;
+            
+            currentDoc.currentId = newId;
+            await currentDoc.save();
+        }
+
+        res.status(200).send('ID processed');
+    } catch (error) {
+        console.error('Database error:', error);
+        res.status(500).json({ error: 'Error updating ID' });
+    }
 });
 
 // 7. Start the server

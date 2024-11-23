@@ -95,8 +95,8 @@ const sendMessage = async (event) => {
     
     messagesContainer.innerHTML += `<p><strong>User:</strong> ${messageData.message}</p>`;
     const payload = conversationHistory.length === 0
-    ? { input: messageData.message, id: participantID}
-    : { history: conversationHistory, input: messageData.message, id: participantID};
+    ? { input: messageData.message, id: participantID, botType: "new"}
+    : { history: conversationHistory, input: messageData.message, id: participantID, botType: "new"};
 
     const response = await fetch('/submit_form', {
         method: 'POST',
@@ -144,6 +144,8 @@ const sendMessage = async (event) => {
 sendBtn.addEventListener("click", function () {
     sendMessage();
 });
+
+
 
 function createChart(data, introduction, conclusion) {
     const margin = { top: 20, right: 30, bottom: 40, left: 40 };
@@ -209,9 +211,26 @@ function createChart(data, introduction, conclusion) {
     
     svg.on("click", function () {
         showModal(this.parentNode); // pass the entire SVG to showModal
+        logEvent('click', 'Bar Chart');
+
     });
     return "Chart created successfully! Click on it to learn more.";
 }
 
-// Load conversation history when the page loads
+// Load conversation history when the page lyoads
 window.onload = conversationHistory;
+
+
+function logEvent(type, element) {
+    fetch('/log-event', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+            eventType: type, 
+            elementName: element, 
+            botType: "new",
+            timestamp: new Date(),
+            participantID 
+        })
+    });
+}

@@ -3,10 +3,37 @@
         <input type="text" id="participantID" name="participantID" required>
         <button type="submit">Start Chat</button>
     </form>
+    <p>If you are a participant for the Interactive Information Retrieval Study, please type in the following ID:
+        <div id="studyID" class="participant-id">Loading...</div>
+    </p>
 <script>
-        document.getElementById('participant-form').addEventListener('submit', function(event) {
+        document.getElementById('participant-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
             const participantID = document.getElementById('participantID').value;
-            // Save the Participant ID in localStorage
-            localStorage.setItem('participantID', participantID);
+            
+            // Try to update ID if it's a test ID
+            try {
+                const response = await fetch('/api/update-id', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ usedId: participantID })
+                });
+                
+                // Save ID to localStorage regardless of type
+                localStorage.setItem('participantID', participantID);
+                // Proceed to next page
+                window.location.href = '/links.html';
+            } catch (error) {
+                console.error('Error:', error);
+            }
         });
+        // Fetch and display the current test ID
+        fetch('/api/current-id')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('studyID').textContent = data.currentId;
+            })
+            .catch(error => console.error('Error:', error));
 </script>

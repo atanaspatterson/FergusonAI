@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 const EventLogSchema = new Schema({
     eventType: String, // Type of event (click, hover, focus)
     elementName: String, // Name of the element (e.g., Send Button)
+    botType: String,
     timestamp: { 
         type: Date, 
         default: Date.now },
