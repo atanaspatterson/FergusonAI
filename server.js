@@ -157,15 +157,15 @@ app.post('/history', async (req, res) => {
 app.post('/redirect-to-survey', (req, res) => {
   console.log('Received redirect request with body:', req.body);
   
-  const { participantID } = req.body;
-  
+  const { participantID, basicSurveyURL } = req.body;
+
   if (!participantID) {
     console.error('No participantID provided');
     return res.status(400).send('participantID is required');
   }
   
-  const qualtricsBaseUrl = "https://usfca.qualtrics.com/jfe/form/SV_bmEfCywEdDzysPI";
-  const surveyUrl = `${qualtricsBaseUrl}?participantID=${encodeURIComponent(participantID)}`;
+  console.log(basicSurveyURL + "uehf")
+  const surveyUrl = `${basicSurveyURL}?participantID=${encodeURIComponent(participantID)}`;
   
   console.log('Generated survey URL:', surveyUrl);
   res.send(surveyUrl);

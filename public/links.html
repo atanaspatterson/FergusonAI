@@ -52,59 +52,19 @@
 
     <div class="workflow-section">
         <h2>Pre-Task Assessments</h2>
-        <a href="https://YOUR_QUALTRICS_PRE_TASK_ASSESSMENT_LINK" class="workflow-link" id="pre-task-link">Complete Pre-Task Assessments</a>
+        <a href="https://qualtricsxmqgrhb8nxx.qualtrics.com/jfe/form/SV_elGM8Zz4vKpGyYC" class="workflow-link" id="pre-task-link">Complete Pre-Task Assessments</a>
     </div>
     
     <div class="workflow-section">
         <h2>AI Agent Interaction</h2>
-        <a href="chat.html" class="workflow-link" id="ai-agent-link">Interact with AI Agent</a>
+        <a href="chat.html" class="workflow-link" id="ai-agent-link">Interact with Improved AI Agent</a>
         <a href="old_chat.html" class="workflow-link" id="baseline-link">Interact with Baseline AI Agent</a>
     </div>
 
     <div class="workflow-section">
         <h2>Post-Task Questionnaire</h2>
-        <a href="https://YOUR_QUALTRICS_POST_TASK_SURVEY_LINK" class="workflow-link" id="post-task-link">Complete Post-Task Questionnaire</a>
+        <a href="https://qualtricsxmqgrhb8nxx.qualtrics.com/jfe/form/SV_3jZyIkZVS6CpT38" class="workflow-link" id="post-task-link">Complete Post-Task Questionnaire</a>
     </div>
-
-    <script>
-        // Retrieve and validate participant ID before allowing navigation
-        document.addEventListener('DOMContentLoaded', function() {
-            const participantID = localStorage.getItem('participantID');
-            
-            if (!participantID) {
-                // Redirect back to ID entry if no participant ID is found
-                window.location.href = 'index.html';
-                return;
-            }
-
-            // Add event listeners for survey links
-            const surveyButtons = ['demographics-link', 'pre-task-link', 'post-task-link'];
-            
-            surveyButtons.forEach(buttonId => {
-                const button = document.getElementById(buttonId);
-                button.addEventListener('click', function(event) {
-                    event.preventDefault();
-                    // Redirect to survey using server endpoint
-                    fetch('/redirect-to-survey', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ participantID: participantID })
-                    })
-                    .then(response => response.text())
-                    .then(surveyUrl => {
-                        // Redirect to the survey URL
-                        // logEvent('redirect', 'Qualtrics Survey');
-                        window.location.href = surveyUrl;
-                    })
-                    .catch(error => {
-                        console.error('Error redirecting to survey:', error);
-                        alert('There was an error redirecting to the survey. Please try again.');
-                    });
-                });
-            });
-        });
-    </script>
+    <script src="links_script.js"></script>
 </body>
 </html>

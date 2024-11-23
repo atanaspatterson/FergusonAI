@@ -5,62 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Study Task</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-    <style>
-        html {
-            background-color: rgb(229, 228, 228);
-            font-family: 'Roboto', sans-serif;
-            width: 100%;
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px 0;
-        }
-        #task-container {
-            flex: 1; 
-            background-color: #fff;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            width: 50%;
-            max-width: 600px; 
-            padding: 15px;
-            padding-top: 25px;
-            border-radius: 4px;
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-            position: relative;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        .back-button {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            background-color: rgb(94, 134, 255);
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.15s ease-in;
-            z-index: 10;
-        }
-        .back-button:hover {
-            background-color: rgb(52, 74, 142);
-        }
-        #task-description {
-            text-align: left;
-            padding: 20px;
-            background-color: rgb(245, 245, 245);
-            border-radius: 4px;
-        }
-    </style>
+    <link rel="stylesheet" href="task_styles.css">
 </head>
 <body>
     <div id="task-container">
@@ -69,16 +14,17 @@
         <div id="task-description">
             <p><strong>Scenario:</strong> A relative who is unfamiliar with soccer has come across a video showing highlights from the best soccer players of the last 10 years. Despite them enjoying the highlights and getting a few names of footballers they liked from the video, your relative lacks context into the players' careers, their teams and positions throughout the last decade, and most importantly how these players compare against each other to recognize which names actually contribute the most to their team.<br><br>
 
-            <strong>Task:</strong> Choose four players from the 12 available ones in our application and come up with as much information on them as possible. You should aim to get information such as specific statistics, the role of the players in each team, and how they compare to other standout players in the last 10 years<br><br>
+            <strong>Task:</strong> Choose four players from the 12 available ones in our application (will be provided if using baseline app instead) and come up with as much information on them as possible. You should aim to get information such as specific statistics, the role of the players in each team, and how they compare to other standout players in the last 10 years<br><br>
                 
             You are also given freedom to venture off and type in any conclusion you like, such as selecting highly specific timeframes and seasons, or anything you can come up with.<br><br>
                 
-            <strong>Additional Details & Instructions:</strong><br>
+            <strong>Important Details & Instructions:</strong><br>
             <ul>
-                <li>The format of the information will be for you to write down 1-2 sentence conclusions as you go. For instance, these might look like: "X has more goals than Y because X plays more forward", or "X has played for Y team"</li>
-                <li>Even though the graph will display correct data, try choose dates before 2015 unless you are well-knowledged in these players' careets.</li>
+                <li>The format of the information will be for you to write down 1-2 sentence conclusions as you go. For instance, these might look like: "X has more goals than Y because X plays more forward", or "X has played for Y team".</li>
+                <li>If your ID ended with an odd number, you will use the new model. If your id ended with an even number, you will use the baseline model.</li>
+                <li>Even though the graph will display correct data, try to choose dates before 2015 unless you are well-versed in these players' careers.</li>
                 <li>The activity should take about 25-30 minutes.</li>
-            </ul><br>
+            </ul>
             </p>
             <h3>Below is an explanation of how the app works:</h3>
             <p>
